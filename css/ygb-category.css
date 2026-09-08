@@ -1,0 +1,158 @@
+/**
+ * YGB Category Showcase Styles
+ * Version: 2.1
+ * Optimizado para rendimiento y accesibilidad
+ * NOTA: Los colores son controlados por CSS dinámico del plugin
+ */
+
+/* Grid base - sin límite de columnas */
+.ygb-grid {
+    display: grid;
+    gap: 5px;
+    margin: 20px 0;
+}
+
+/* Card con efectos suaves - SIN colores fijos */
+.ygb-card {
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 8px;
+}
+
+.ygb-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.ygb-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+/* Eliminar subrayado del título en hover/focus */
+.ygb-link:hover .ygb-name,
+.ygb-link:focus .ygb-name,
+.ygb-name {
+    text-decoration: none;
+}
+
+/* Focus state para accesibilidad */
+.ygb-link:focus {
+    outline: 2px solid #007cba;
+    outline-offset: 2px;
+}
+
+/* Imagen con efecto hover */
+.ygb-image {
+    width: 100%;
+    aspect-ratio: 1/1;
+    overflow: hidden;
+    background: #f5f5f5;
+}
+
+.ygb-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.ygb-card:hover .ygb-image img {
+    transform: scale(1.05);
+}
+
+/* Info */
+.ygb-info {
+    padding: 8px;
+    text-align: center;
+}
+
+/* Nombre - SIN color fijo - SIN subrayado */
+.ygb-name {
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin: 0 0 5px 0;
+    line-height: 1.3;
+    text-decoration: none;
+}
+
+/* Descripción - SIN color fijo */
+.ygb-desc {
+    font-size: 0.7rem;
+    margin: 0 0 5px 0;
+    line-height: 1.3;
+}
+
+/* Contador - SIN color fijo */
+.ygb-count {
+    font-size: 0.65rem;
+    background: transparent;
+    padding: 2px 4px;
+    border-radius: 4px;
+    display: inline-block;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+/* Tablet (768px - 1024px) - 5 columnas máximo */
+@media (min-width: 768px) and (max-width: 1024px) {
+    .ygb-grid {
+        grid-template-columns: repeat(5, 1fr) !important;
+        gap: 8px;
+    }
+}
+
+/* Móvil (≤767px) - 3 columnas */
+@media (max-width: 767px) {
+    .ygb-grid {
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 8px;
+    }
+    
+    .ygb-info {
+        padding: 6px;
+    }
+    
+    .ygb-name {
+        font-size: 0.75rem;
+    }
+}
+
+/* Móviles pequeños (≤480px) */
+@media (max-width: 480px) {
+    .ygb-grid {
+        gap: 6px;
+    }
+    
+    .ygb-info {
+        padding: 4px;
+    }
+    
+    .ygb-name {
+        font-size: 0.7rem;
+    }
+    
+    .ygb-desc {
+        font-size: 0.6rem;
+    }
+    
+    .ygb-count {
+        font-size: 0.55rem;
+    }
+}
+
+/* Mejora de rendimiento: will-change */
+.ygb-card {
+    will-change: transform;
+}
+
+/* Prevenir FOUT (Flash of Unstyled Text) */
+.ygb-name, .ygb-desc, .ygb-count {
+    text-rendering: optimizeLegibility;
+}

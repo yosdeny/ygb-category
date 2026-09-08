@@ -1,13 +1,20 @@
 <?php
 /**
  * Plugin Name: YGB Category Showcase
+ * Plugin URI: https://github.com/yosdeny
  * Description: Muestra las categorías de WooCommerce con imágenes y textos
  * Version: 3.3.0
  * Author: YGB
+ * Author URI: https://github.com/yosdeny
  * Text Domain: ygb-category
+ * Requires at least: 7.0
+ * Tested up to: 7.1
  * WC requires at least: 4.0
  * WC tested up to: 9.0
- * Requires PHP: 7.4
+ * Requires PHP: 8.0
+ * Tested PHP: 8.2
+ * License: GPLv2 or later
+ * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -988,21 +995,25 @@ function ygb_examples_page() {
     <?php wp_nonce_field( 'ygb_examples_action', 'ygb_examples_nonce' ); ?>
     
     <script>
-    jQuery(document).ready(function($) {
-        $('.copy-btn').on('click', function() {
-            var code = $(this).data('code');
-            if (navigator.clipboard && navigator.clipboard.writeText) {
-                navigator.clipboard.writeText(code).then(function() {
-                    var btn = $(this);
-                    var original = btn.text();
-                    btn.text('<?php esc_html_e( '¡Copiado!', 'ygb-category' ); ?>');
-                    setTimeout(function() {
-                        btn.text(original);
-                    }, 1500);
-                }.bind(this));
-            }
+    (function() {
+        'use strict';
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.copy-btn').forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    var code = this.getAttribute('data-code');
+                    if (navigator.clipboard && navigator.clipboard.writeText) {
+                        navigator.clipboard.writeText(code).then(function() {
+                            var original = btn.textContent;
+                            btn.textContent = '<?php esc_html_e( '¡Copiado!', 'ygb-category' ); ?>';
+                            setTimeout(function() {
+                                btn.textContent = original;
+                            }, 1500);
+                        });
+                    }
+                });
+            });
         });
-    });
+    })();
     </script>
     
     <style>

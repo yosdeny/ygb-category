@@ -1,9 +1,10 @@
 === YGB Category Showcase ===
 Contributors: ygb
 Tags: woocommerce, categories, products, astra, grid, showcase, responsive, secure
-Requires at least: 5.0
-Tested up to: 6.7
-Requires PHP: 7.4
+Requires at least: 7.0
+Tested up to: 7.1
+Requires PHP: 8.0
+Tested PHP: 8.2
 Stable tag: 3.3.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -62,9 +63,9 @@ Sin conteo ni descripciones:
 
 = Requisitos =
 
-* WordPress 5.0 o superior
+* WordPress 7.0 o superior
 * WooCommerce 4.0 o superior
-* PHP 7.4 o superior
+* PHP 8.0 o superior
 
 = Compatibilidad =
 

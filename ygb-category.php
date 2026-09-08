@@ -3,7 +3,7 @@
  * Plugin Name: YGB Category Showcase
  * Plugin URI: https://github.com/yosdeny
  * Description: Muestra las categorías de WooCommerce con imágenes y textos
- * Version: 3.3.0
+ * Version: 3.4.0
  * Author: YGB
  * Author URI: https://github.com/yosdeny
  * Text Domain: ygb-category
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 // Constantes
 define( 'YGB_URL', plugin_dir_url( __FILE__ ) );
 define( 'YGB_PATH', plugin_dir_path( __FILE__ ) );
-define( 'YGB_VERSION', '3.3.0' );
+define( 'YGB_VERSION', '3.4.0' );
 
 /**
  * Sanitizar color hexadecimal
@@ -54,7 +54,7 @@ function ygb_sanitize_hex_color( $color ) {
 }
 
 /**
- * Sanitizar CSS personalizado - VERSIÓN MEJORADA v3.3.0
+ * Sanitizar CSS personalizado - VERSIÓN MEJORADA v3.4.0
  * CORRECCIÓN: Validación más estricta de propiedades y selectores
  * Lista blanca de propiedades CSS seguras con límite de rendimiento
  *
@@ -327,7 +327,7 @@ function ygb_display_categories( $atts ) {
         /**
          * Acción antes del grid de categorías
          *
-         * @since 3.3.0
+         * @since 3.4.0
          * @param array $atts Atributos del shortcode
          */
         ob_start();
@@ -382,7 +382,7 @@ function ygb_display_categories( $atts ) {
         /**
          * Acción después del grid de categorías
          *
-         * @since 3.3.0
+         * @since 3.4.0
          * @param array $atts Atributos del shortcode
          */
         ob_start();

@@ -5,7 +5,7 @@
  * Limpia todas las opciones y transientes del plugin
  * 
  * @package YGB_Category
- * @version 3.3.0
+ * @version 3.4.0
  */
 
 if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {

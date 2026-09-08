@@ -5,7 +5,7 @@ Requires at least: 7.0
 Tested up to: 7.1
 Requires PHP: 8.0
 Tested PHP: 8.2
-Stable tag: 3.3.0
+Stable tag: 3.4.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -102,6 +102,11 @@ Sí, el plugin ha sido auditado por expertos en seguridad WordPress y sigue toda
 
 == Changelog ==
 
+= 3.4.0 =
+* **ACTUALIZACIÓN:** Versión actualizada a 3.4.0 en todos los archivos del plugin
+* **MEJORA:** Documentación de hooks actualizada con @since 3.4.0
+* **MANTENIMIENTO:** Limpieza general de referencias de versión
+
 = 3.3.0 =
 * **CORRECCIÓN:** Unificada versión en todos los archivos (readme.txt: 1.7 → 3.3.0, ygb-category.js: 3.2.0 → 3.3.0, ygb-category.css: 2.1 → 3.3.0)
 * **CORRECCIÓN:** Sistema responsive ahora respeta la configuración de columnas del usuario en lugar de forzar valores fijos
@@ -137,6 +142,9 @@ Sí, el plugin ha sido auditado por expertos en seguridad WordPress y sigue toda
 * Versión inicial
 
 == Upgrade Notice ==
+
+= 3.4.0 =
+Actualización de mantenimiento que unifica la versión 3.4.0 en todos los archivos del plugin y actualiza la documentación de hooks. Recomendada para mantener consistencia.
 
 = 3.3.0 =
 Actualización crítica que corrige problemas de seguridad, inconsistencia de versiones y mejora el sistema responsive. Recomendada para todos los usuarios.

@@ -1,11 +1,12 @@
 /**
  * YGB Category Showcase Styles
- * Version: 2.1
+ * Version: 3.3.0
  * Optimizado para rendimiento y accesibilidad
  * NOTA: Los colores son controlados por CSS dinámico del plugin
+ * CORRECCIÓN: Sistema responsive respeta la configuración del usuario
  */
 
-/* Grid base - sin límite de columnas */
+/* Grid base - las columnas se definen inline desde PHP según configuración */
 .ygb-grid {
     display: grid;
     gap: 5px;
@@ -97,21 +98,22 @@
 }
 
 /* ============================================
-   RESPONSIVE
+   RESPONSIVE - CORREGIDO: Respeta configuración del usuario
    ============================================ */
 
-/* Tablet (768px - 1024px) - 5 columnas máximo */
+/* Tablet (768px - 1024px) - Reduce columnas progresivamente sin forzar valores fijos */
 @media (min-width: 768px) and (max-width: 1024px) {
     .ygb-grid {
-        grid-template-columns: repeat(5, 1fr) !important;
+        /* Usar auto-fit para adaptar columnas al ancho disponible */
+        grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr)) !important;
         gap: 8px;
     }
 }
 
-/* Móvil (≤767px) - 3 columnas */
+/* Móvil (≤767px) - 2 columnas como máximo para mejor usabilidad */
 @media (max-width: 767px) {
     .ygb-grid {
-        grid-template-columns: repeat(3, 1fr) !important;
+        grid-template-columns: repeat(2, 1fr) !important;
         gap: 8px;
     }
     
@@ -124,9 +126,10 @@
     }
 }
 
-/* Móviles pequeños (≤480px) */
+/* Móviles pequeños (≤480px) - 1 columna para mejor legibilidad */
 @media (max-width: 480px) {
     .ygb-grid {
+        grid-template-columns: 1fr !important;
         gap: 6px;
     }
     

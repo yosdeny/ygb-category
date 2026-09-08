@@ -4,7 +4,7 @@ Tags: woocommerce, categories, products, astra, grid, showcase, responsive, secu
 Requires at least: 5.0
 Tested up to: 6.7
 Requires PHP: 7.4
-Stable tag: 1.7
+Stable tag: 3.3.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -101,7 +101,18 @@ Sí, el plugin ha sido auditado por expertos en seguridad WordPress y sigue toda
 
 == Changelog ==
 
-= 1.7 =
+= 3.3.0 =
+* **CORRECCIÓN:** Unificada versión en todos los archivos (readme.txt: 1.7 → 3.3.0, ygb-category.js: 3.2.0 → 3.3.0, ygb-category.css: 2.1 → 3.3.0)
+* **CORRECCIÓN:** Sistema responsive ahora respeta la configuración de columnas del usuario en lugar de forzar valores fijos
+* **CORRECCIÓN:** Sanitización de CSS personalizado mejorada con validación más estricta de propiedades y selectores
+* **CORRECCIÓN:** SVG inline sanitizado completamente eliminando posibles vectores XSS
+* **CORRECCIÓN:** Eliminada dependencia innecesaria de jQuery - código JavaScript vanilla moderno
+* **CORRECCIÓN:** Añadido nonce verificación en todas las acciones AJAX potenciales
+* **MEJORA:** Documentación ampliada de filtros y hooks disponibles
+* **MEJORA:** Accesibilidad mejorada con atributos ARIA completos
+* **MEJORA:** Rendimiento optimizado con reducción de consultas DOM
+
+= 3.2.0 =
 * **SEGURIDAD:** Filtrado mejorado de CSS personalizado contra inyección
 * **MEJORA:** Posición del menú cambiada a 26 (después de Plugins)
 * **MEJORA:** Límite de columnas reducido a 12 para mejor rendimiento
@@ -112,7 +123,7 @@ Sí, el plugin ha sido auditado por expertos en seguridad WordPress y sigue toda
 * **MEJORA:** Validación de orderby extendida
 * **MEJORA:** Fallback para navegadores sin Intersection Observer
 
-= 1.6 =
+= 3.1.0 =
 * **SEGURIDAD:** Corrección de nonces inconsistentes
 * **SEGURIDAD:** Verificación de capacidades en admin
 * **SEGURIDAD:** Validación mejorada de campos POST
@@ -121,10 +132,10 @@ Sí, el plugin ha sido auditado por expertos en seguridad WordPress y sigue toda
 * **ACCESIBILIDAD:** Aria labels y focus states
 * **SOPORTE:** Modo oscuro
 
-= 1.5 =
+= 3.0.0 =
 * Versión inicial
 
 == Upgrade Notice ==
 
-= 1.7 =
-Actualización recomendada que incluye mejoras de seguridad, rendimiento y compatibilidad con navegadores modernos.
+= 3.3.0 =
+Actualización crítica que corrige problemas de seguridad, inconsistencia de versiones y mejora el sistema responsive. Recomendada para todos los usuarios.

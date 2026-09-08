@@ -1,6 +1,6 @@
 /**
  * YGB Category Showcase JavaScript
- * Version: 3.3.0
+ * Version: 3.4.0
  * CORRECCIÓN: Eliminada dependencia de jQuery - Vanilla JS moderno
  * Mejoras de accesibilidad, rendimiento y Clipboard API moderna
  */

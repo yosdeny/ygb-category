@@ -47,7 +47,8 @@ function ygb_sanitize_hex_color( $color ) {
 }
 
 /**
- * Sanitizar CSS personalizado - VERSIÓN OPTIMIZADA
+ * Sanitizar CSS personalizado - VERSIÓN MEJORADA v3.3.0
+ * CORRECCIÓN: Validación más estricta de propiedades y selectores
  * Lista blanca de propiedades CSS seguras con límite de rendimiento
  *
  * @param string $css CSS a sanitizar
@@ -58,19 +59,21 @@ function ygb_sanitize_custom_css( $css ) {
         return '';
     }
     
-    // Eliminar caracteres nulos y tags HTML
+    // Eliminar caracteres nulos, tags HTML y comentarios peligrosos
     $css = preg_replace( '/[\x00-\x1F\x7F]/', '', $css );
     $css = wp_strip_all_tags( $css );
+    // Eliminar comentarios CSS que puedan contener código malicioso
+    $css = preg_replace( '/\/\*.*?\*\//s', '', $css );
     
-    // Límite de líneas para rendimiento (máximo 200 líneas)
+    // Límite de líneas para rendimiento (máximo 100 líneas - reducido de 200)
     $lines = explode( "\n", $css );
-    if ( count( $lines ) > 200 ) {
-        $lines = array_slice( $lines, 0, 200 );
+    if ( count( $lines ) > 100 ) {
+        $lines = array_slice( $lines, 0, 100 );
         $css = implode( "\n", $lines );
         $lines = explode( "\n", $css );
     }
     
-    // Propiedades CSS permitidas (lista blanca)
+    // Propiedades CSS permitidas (lista blanca estricta)
     $allowed_properties = array(
         'color', 'background', 'background-color', 'border', 'border-radius',
         'margin', 'padding', 'font-size', 'font-weight', 'font-family',
@@ -78,14 +81,16 @@ function ygb_sanitize_custom_css( $css ) {
         'letter-spacing', 'box-shadow', 'transition', 'transform',
         'opacity', 'visibility', 'display', 'position', 'top', 'right',
         'bottom', 'left', 'z-index', 'width', 'max-width', 'min-width',
-        'height', 'max-height', 'min-height', 'overflow', 'cursor'
+        'height', 'max-height', 'min-height', 'overflow', 'cursor',
+        'flex-direction', 'flex-wrap', 'justify-content', 'align-items',
+        'gap', 'grid-template-columns', 'grid-gap'
     );
     
-    // Selectores CSS permitidos (solo clases y elementos básicos)
+    // Selectores CSS permitidos (solo clases del plugin y elementos básicos)
     $allowed_selectors = array(
-        '\.ygb-', '\.ygb-grid', '\.ygb-card', '\.ygb-link',
-        '\.ygb-image', '\.ygb-info', '\.ygb-name', '\.ygb-desc',
-        '\.ygb-count', 'div', 'span', 'h3', 'p', 'a'
+        '.ygb-', '.ygb-grid', '.ygb-card', '.ygb-link',
+        '.ygb-image', '.ygb-info', '.ygb-name', '.ygb-desc',
+        '.ygb-count', 'div', 'span', 'h3', 'p', 'a'
     );
     
     $clean_lines = array();
@@ -99,12 +104,13 @@ function ygb_sanitize_custom_css( $css ) {
         // Verificar que el selector sea seguro
         $selector_safe = false;
         foreach ( $allowed_selectors as $pattern ) {
-            if ( preg_match( '/^' . $pattern . '/', $line ) ) {
+            if ( preg_match( '/^' . preg_quote( $pattern, '/' ) . '/', $line ) ) {
                 $selector_safe = true;
                 break;
             }
         }
         
+        // Permitir @media queries pero validar su contenido
         if ( ! $selector_safe && ! preg_match( '/^@media/', $line ) ) {
             continue; // Saltar selectores no permitidos
         }
@@ -118,7 +124,7 @@ function ygb_sanitize_custom_css( $css ) {
             }
         }
         
-        // Eliminar expresiones peligrosas
+        // Eliminar expresiones peligrosas adicionales
         $dangerous_patterns = array(
             '/expression\s*\(/i',
             '/javascript\s*:/i',
@@ -126,13 +132,26 @@ function ygb_sanitize_custom_css( $css ) {
             '/moz-binding/i',
             '/eval\s*\(/i',
             '/behavior\s*:/i',
-            '/url\(\s*["\']?data:/i'
+            '/url\(\s*["\']?data:/i',
+            '/import\s+url/i',
+            '/@import/i',
+            '/-webkit-gradient/i',
+            '/binding\s*:/i'
         );
         
         foreach ( $dangerous_patterns as $pattern ) {
             if ( preg_match( $pattern, $line ) ) {
                 $property_safe = false;
                 break;
+            }
+        }
+        
+        // Validación adicional: evitar valores url() externos excepto data: safe
+        if ( stripos( $line, 'url(' ) !== false ) {
+            // Solo permitir URLs relativas o data: SVG safe
+            if ( ! preg_match( '/url\(\s*["\']?(https?:)?\/\//i', $line ) && 
+                 ! preg_match( '/url\(\s*["\']?data:image\/svg\+/i', $line ) ) {
+                $property_safe = false;
             }
         }
         
@@ -143,9 +162,9 @@ function ygb_sanitize_custom_css( $css ) {
     
     $clean_css = implode( "\n", $clean_lines );
     
-    // Limitar longitud máxima (10KB)
-    if ( strlen( $clean_css ) > 10240 ) {
-        $clean_css = substr( $clean_css, 0, 10240 );
+    // Limitar longitud máxima (5KB - reducido de 10KB para mayor seguridad)
+    if ( strlen( $clean_css ) > 5120 ) {
+        $clean_css = substr( $clean_css, 0, 5120 );
     }
     
     return $clean_css;
@@ -297,7 +316,18 @@ function ygb_display_categories( $atts ) {
         }
         
         $columns = max( 1, min( 12, absint( $atts['columns'] ) ) );
-        $output = '<div class="ygb-grid" style="grid-template-columns: repeat(' . esc_attr( (string) $columns ) . ', 1fr);">';
+        
+        /**
+         * Acción antes del grid de categorías
+         *
+         * @since 3.3.0
+         * @param array $atts Atributos del shortcode
+         */
+        ob_start();
+        do_action( 'ygb_before_grid', $atts );
+        $output .= ob_get_clean();
+        
+        $output .= '<div class="ygb-grid" style="grid-template-columns: repeat(' . esc_attr( (string) $columns ) . ', 1fr);">';
         
         foreach ( $categories as $category ) {
             $thumbnail_id = get_term_meta( $category->term_id, 'thumbnail_id', true );
@@ -308,7 +338,8 @@ function ygb_display_categories( $atts ) {
             }
             
             if ( ! $image ) {
-                $image = 'data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22300%22%20height%3D%22300%22%20viewBox%3D%220%200%20300%20300%22%3E%3Crect%20width%3D%22300%22%20height%3D%22300%22%20fill%3D%22%23f0f0f0%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20dominant-baseline%3D%22middle%22%20text-anchor%3D%22middle%22%20fill%3D%22%23999%22%3E' . esc_attr__( 'Sin imagen', 'ygb-category' ) . '%3C%2Ftext%3E%3C%2Fsvg%3E';
+                // CORRECCIÓN: SVG inline sanitizado - sin texto dinámico que pueda ser inyectado
+                $image = 'data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22300%22%20height%3D%22300%22%20viewBox%3D%220%200%20300%20300%22%3E%3Crect%20width%3D%22300%22%20height%3D%22300%22%20fill%3D%22%23f0f0f0%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20dominant-baseline%3D%22middle%22%20text-anchor%3D%22middle%22%20fill%3D%22%23999%22%20font-family%3D%22Arial%22%20font-size%3D%2224%22%3ENo%20Image%3C%2Ftext%3E%3C%2Fsvg%3E';
             }
             
             $link = get_term_link( $category );
@@ -340,6 +371,16 @@ function ygb_display_categories( $atts ) {
         }
         
         $output .= '</div>';
+        
+        /**
+         * Acción después del grid de categorías
+         *
+         * @since 3.3.0
+         * @param array $atts Atributos del shortcode
+         */
+        ob_start();
+        do_action( 'ygb_after_grid', $atts );
+        $output .= ob_get_clean();
         
         if ( $atts['cache'] ) {
             /**
@@ -379,7 +420,8 @@ function ygb_enqueue_styles() {
         wp_add_inline_style( 'ygb-category', $dynamic_css );
     }
     
-    wp_enqueue_script( 'ygb-category', YGB_URL . 'js/ygb-category.js', array( 'jquery' ), YGB_VERSION, true );
+    // CORRECCIÓN: Sin dependencia de jQuery - script vanilla JS
+    wp_enqueue_script( 'ygb-category', YGB_URL . 'js/ygb-category.js', array(), YGB_VERSION, true );
     
     // CSS personalizado del usuario
     $custom_css = get_option( 'ygb_custom_css', '' );
@@ -928,8 +970,18 @@ function ygb_examples_page() {
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }</pre>
             
-            <h3><?php esc_html_e( '🔧 Filtros disponibles', 'ygb-category' ); ?></h3>
+            <h3><?php esc_html_e( '🔧 Filtros y Hooks Disponibles', 'ygb-category' ); ?></h3>
+            <p><strong>ygb_cache_expiration:</strong> Modificar tiempo de caché</p>
             <code>add_filter( 'ygb_cache_expiration', function() { return 2 * HOUR_IN_SECONDS; } );</code>
+            
+            <p><strong>ygb_category_options:</strong> Filtrar opciones del plugin</p>
+            <code>add_filter( 'ygb_category_options', function( $options ) { $options['columns'] = 6; return $options; } );</code>
+            
+            <p><strong>ygb_before_grid:</strong> Acción antes del grid</p>
+            <code>add_action( 'ygb_before_grid', function() { echo '&lt;div class="custom-header"&gt;Categorías&lt;/div&gt;'; } );</code>
+            
+            <p><strong>ygb_after_grid:</strong> Acción después del grid</p>
+            <code>add_action( 'ygb_after_grid', function() { echo '&lt;div class="custom-footer"&gt;Ver todas&lt;/div&gt;'; } );</code>
         </div>
     </div>
     

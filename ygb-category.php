@@ -475,11 +475,11 @@ function ygb_clear_category_cache( $term_id = 0, $tt_id = 0, $taxonomy = '' ) {
         
         global $wpdb;
         $wpdb->query( $wpdb->prepare(
-            "DELETE FROM {$wpdb->options} WHERE option_name LIKE %s",
+            "DELETE FROM {$wpdb->prefix}options WHERE option_name LIKE %s",
             '_transient_ygb_cats_%'
         ) );
         $wpdb->query( $wpdb->prepare(
-            "DELETE FROM {$wpdb->options} WHERE option_name LIKE %s",
+            "DELETE FROM {$wpdb->prefix}options WHERE option_name LIKE %s",
             '_transient_timeout_ygb_cats_%'
         ) );
     }
@@ -618,7 +618,7 @@ function ygb_admin_page() {
         // Limpiar caché
         global $wpdb;
         $wpdb->query( $wpdb->prepare(
-            "DELETE FROM {$wpdb->options} WHERE option_name LIKE %s",
+            "DELETE FROM {$wpdb->prefix}options WHERE option_name LIKE %s",
             '_transient_ygb_cats_%'
         ) );
         

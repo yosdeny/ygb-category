@@ -24,19 +24,19 @@ global $wpdb;
 
 // Eliminar transientes específicos del plugin
 $result = $wpdb->query( $wpdb->prepare(
-    "DELETE FROM {$wpdb->options} WHERE option_name LIKE %s",
+    "DELETE FROM {$wpdb->prefix}options WHERE option_name LIKE %s",
     '_transient_ygb_cats_%'
 ) );
 
 // Eliminar timeouts de transientes
 $result_timeout = $wpdb->query( $wpdb->prepare(
-    "DELETE FROM {$wpdb->options} WHERE option_name LIKE %s",
+    "DELETE FROM {$wpdb->prefix}options WHERE option_name LIKE %s",
     '_transient_timeout_ygb_cats_%'
 ) );
 
 // Limpiar cualquier otra opción residual con prefijo ygb_
 $wpdb->query( $wpdb->prepare(
-    "DELETE FROM {$wpdb->options} WHERE option_name LIKE %s",
+    "DELETE FROM {$wpdb->prefix}options WHERE option_name LIKE %s",
     'ygb_%'
 ) );
 

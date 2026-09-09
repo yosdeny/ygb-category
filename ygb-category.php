@@ -474,13 +474,10 @@ function ygb_clear_category_cache( $term_id = 0, $tt_id = 0, $taxonomy = '' ) {
         $last_cleared_time = $current_time;
         
         global $wpdb;
+        $like_pattern = $wpdb->esc_like( '_transient_ygb_cats_' ) . '%';
         $wpdb->query( $wpdb->prepare(
-            "DELETE FROM {$wpdb->prefix}options WHERE option_name LIKE %s",
-            '_transient_ygb_cats_%'
-        ) );
-        $wpdb->query( $wpdb->prepare(
-            "DELETE FROM {$wpdb->prefix}options WHERE option_name LIKE %s",
-            '_transient_timeout_ygb_cats_%'
+            "DELETE FROM {$wpdb->options} WHERE option_name LIKE %s",
+            $like_pattern
         ) );
     }
 }
@@ -617,9 +614,10 @@ function ygb_admin_page() {
         
         // Limpiar caché
         global $wpdb;
+        $like_pattern = $wpdb->esc_like( '_transient_ygb_cats_' ) . '%';
         $wpdb->query( $wpdb->prepare(
-            "DELETE FROM {$wpdb->prefix}options WHERE option_name LIKE %s",
-            '_transient_ygb_cats_%'
+            "DELETE FROM {$wpdb->options} WHERE option_name LIKE %s",
+            $like_pattern
         ) );
         
         echo '<div class="notice notice-success is-dismissible"><p>' . esc_html__( 'Configuración guardada correctamente.', 'ygb-category' ) . '</p></div>';

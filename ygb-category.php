@@ -270,8 +270,8 @@ function ygb_display_categories( $atts ) {
     $default_options = get_option( 'ygb_category_options', array(
         'number'     => 12,
         'columns'    => 4,
-        'columns_tablet' => 2,
-        'columns_mobile' => 1,
+        'columns_tablet' => 5,
+        'columns_mobile' => 3,
         'hide_empty' => true,
         'orderby'    => 'name',
         'order'      => 'ASC',
@@ -290,10 +290,10 @@ function ygb_display_categories( $atts ) {
     $atts['columns'] = isset( $atts['columns'] ) ? absint( $atts['columns'] ) : 4;
     $atts['columns'] = max( 1, min( 12, $atts['columns'] ) );
     
-    $atts['columns_tablet'] = isset( $atts['columns_tablet'] ) ? absint( $atts['columns_tablet'] ) : 2;
+    $atts['columns_tablet'] = isset( $atts['columns_tablet'] ) ? absint( $atts['columns_tablet'] ) : 5;
     $atts['columns_tablet'] = max( 1, min( 6, $atts['columns_tablet'] ) );
     
-    $atts['columns_mobile'] = isset( $atts['columns_mobile'] ) ? absint( $atts['columns_mobile'] ) : 1;
+    $atts['columns_mobile'] = isset( $atts['columns_mobile'] ) ? absint( $atts['columns_mobile'] ) : 3;
     $atts['columns_mobile'] = max( 1, min( 4, $atts['columns_mobile'] ) );
     
     $atts['hide_empty'] = filter_var( $atts['hide_empty'], FILTER_VALIDATE_BOOLEAN );
@@ -551,8 +551,8 @@ function ygb_admin_page() {
         'title_hover_color' => '#000000',
         'desc_color'        => '#ffffff',
         'count_color'       => '#e26143',
-        'columns_tablet'    => 2,
-        'columns_mobile'    => 1
+        'columns_tablet'    => 5,
+        'columns_mobile'    => 3
     );
     
     // Asegurar que todas las opciones de color y columnas existan
@@ -567,8 +567,8 @@ function ygb_admin_page() {
         // Opciones básicas
         $options['number']     = isset( $_POST['number'] ) ? absint( $_POST['number'] ) : 12;
         $options['columns']    = isset( $_POST['columns'] ) ? absint( $_POST['columns'] ) : 4;
-        $options['columns_tablet'] = isset( $_POST['columns_tablet'] ) ? absint( $_POST['columns_tablet'] ) : 2;
-        $options['columns_mobile'] = isset( $_POST['columns_mobile'] ) ? absint( $_POST['columns_mobile'] ) : 1;
+        $options['columns_tablet'] = isset( $_POST['columns_tablet'] ) ? absint( $_POST['columns_tablet'] ) : 5;
+        $options['columns_mobile'] = isset( $_POST['columns_mobile'] ) ? absint( $_POST['columns_mobile'] ) : 3;
         $options['hide_empty'] = isset( $_POST['hide_empty'] );
         $options['show_count'] = isset( $_POST['show_count'] );
         $options['show_description'] = isset( $_POST['show_description'] );

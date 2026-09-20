@@ -1,6 +1,6 @@
 /**
  * YGB Category Showcase Styles
- * Version: 3.4.0
+ * Version: 3.5.0
  * Optimizado para rendimiento y accesibilidad
  * NOTA: Los colores son controlados por CSS dinámico del plugin
  * CORRECCIÓN: Sistema responsive respeta la configuración del usuario
@@ -9,7 +9,7 @@
 /* Grid base - las columnas se definen inline desde PHP según configuración */
 .ygb-grid {
     display: grid;
-    gap: 5px;
+    gap: 20px;
     margin: 20px 0;
 }
 
@@ -105,12 +105,16 @@
 /* Tablet (768px - 1024px) - El grid usa media queries inline desde PHP */
 @media (min-width: 768px) and (max-width: 1024px) {
     .ygb-grid {
-        gap: 8px;
+        gap: 15px;
     }
 }
 
 /* Móvil (≤767px) - El grid usa media queries inline desde PHP */
 @media (max-width: 767px) {
+    .ygb-grid {
+        gap: 10px;
+    }
+    
     .ygb-info {
         padding: 6px;
     }

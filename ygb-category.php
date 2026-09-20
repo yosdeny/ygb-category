@@ -3,7 +3,7 @@
  * Plugin Name: YGB Category Showcase
  * Plugin URI: https://github.com/yosdeny
  * Description: Muestra las categorías de WooCommerce con imágenes y textos
- * Version: 3.4.0
+ * Version: 3.5.0
  * Author: YGB
  * Author URI: https://github.com/yosdeny
  * Text Domain: ygb-category
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 // Constantes
 define( 'YGB_URL', plugin_dir_url( __FILE__ ) );
 define( 'YGB_PATH', plugin_dir_path( __FILE__ ) );
-define( 'YGB_VERSION', '3.4.0' );
+define( 'YGB_VERSION', '3.5.0' );
 
 /**
  * Sanitizar color hexadecimal
@@ -344,12 +344,15 @@ function ygb_display_categories( $atts ) {
         do_action( 'ygb_before_grid', $atts );
         $output .= ob_get_clean();
         
-        // Generar CSS inline con configuración responsive completa
-        $grid_style = 'grid-template-columns: repeat(' . esc_attr( (string) $columns ) . ', 1fr);';
-        $grid_style .= '@media (max-width: 1024px) { grid-template-columns: repeat(' . esc_attr( (string) $columns_tablet ) . ', 1fr) !important; }';
-        $grid_style .= '@media (max-width: 767px) { grid-template-columns: repeat(' . esc_attr( (string) $columns_mobile ) . ', 1fr) !important; }';
+        // Generar CSS con media queries para configuración responsive completa
+        $unique_id = 'ygb-grid-' . uniqid();
+        $output .= '<style>';
+        $output .= '#' . esc_attr( $unique_id ) . ' { display: grid; grid-template-columns: repeat(' . esc_attr( (string) $columns ) . ', 1fr); gap: 20px; }';
+        $output .= '@media (max-width: 1024px) { #' . esc_attr( $unique_id ) . ' { grid-template-columns: repeat(' . esc_attr( (string) $columns_tablet ) . ', 1fr); } }';
+        $output .= '@media (max-width: 767px) { #' . esc_attr( $unique_id ) . ' { grid-template-columns: repeat(' . esc_attr( (string) $columns_mobile ) . ', 1fr); } }';
+        $output .= '</style>';
         
-        $output .= '<div class="ygb-grid" style="' . esc_attr( $grid_style ) . '">';
+        $output .= '<div id="' . esc_attr( $unique_id ) . '" class="ygb-grid">';
         
         foreach ( $categories as $category ) {
             $thumbnail_id = get_term_meta( $category->term_id, 'thumbnail_id', true );

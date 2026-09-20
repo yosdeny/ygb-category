@@ -99,31 +99,31 @@
 
 /* ============================================
    RESPONSIVE - CORREGIDO: Respeta configuración del usuario
-   Las columnas se definen inline desde PHP
+   Las columnas se definen inline desde PHP con media queries
+   Este CSS solo ajusta gaps y tamaños de texto
    ============================================ */
 
-/* Tablet (768px - 1024px) - El grid usa media queries inline desde PHP */
-@media (min-width: 768px) and (max-width: 1024px) {
+/* Tablet (768px - 1024px) - Solo ajusta gap, NO modifica columnas */
+@media (max-width: 1024px) and (min-width: 768px) {
     .ygb-grid {
         gap: 15px;
     }
 }
 
-/* Móvil (≤767px) - El grid usa media queries inline desde PHP */
+/* Móvil (≤767px) - Solo ajusta gap y textos, NO modifica columnas */
 @media (max-width: 767px) {
     .ygb-grid {
         gap: 10px;
     }
-    
+
     .ygb-info {
         padding: 6px;
     }
-    
+
     .ygb-name {
         font-size: 0.75rem;
     }
 }
-
 /* Móviles pequeños (≤480px) */
 @media (max-width: 480px) {
     .ygb-info {

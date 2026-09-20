@@ -283,7 +283,7 @@ function ygb_display_categories( $atts ) {
     
     $atts = shortcode_atts( $default_options, $atts );
     
-    // Sanitizar atributos
+    // Sanitizar atributos - obtener valores de la opción o usar defaults
     $atts['number'] = isset( $atts['number'] ) ? absint( $atts['number'] ) : 12;
     $atts['number'] = max( 1, min( 20, $atts['number'] ) );
     
@@ -550,10 +550,12 @@ function ygb_admin_page() {
         'title_color'       => '#000000',
         'title_hover_color' => '#000000',
         'desc_color'        => '#ffffff',
-        'count_color'       => '#e26143'
+        'count_color'       => '#e26143',
+        'columns_tablet'    => 2,
+        'columns_mobile'    => 1
     );
     
-    // Asegurar que todas las opciones de color existan
+    // Asegurar que todas las opciones de color y columnas existan
     foreach ( $default_colors as $key => $default ) {
         if ( ! isset( $options[ $key ] ) ) {
             $options[ $key ] = $default;

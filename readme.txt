@@ -5,7 +5,7 @@ Requires at least: 7.0
 Tested up to: 7.1
 Requires PHP: 8.0
 Tested PHP: 8.2
-Stable tag: 3.4.0
+Stable tag: 3.5.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -17,13 +17,13 @@ YGB Category Showcase es un plugin ligero y seguro que te permite mostrar las ca
 
 = Características Principales =
 
-* Grid responsive con 1-12 columnas configurables
+* Grid responsive con 1-12 columnas configurables por dispositivo (PC, Tablet, Móvil)
 * Imágenes destacadas de categorías con efecto hover
 * Descripciones de categorías
 * Conteo de productos por categoría
 * Sistema de caché con limpieza automática
 * Compatible con el tema Astra (gratis y pro)
-* Totalmente responsive (mobile first)
+* Totalmente responsive con breakpoints personalizados (≤1024px tablet, ≤767px móvil)
 * Soporte para modo oscuro
 * Optimizado para SEO y accesibilidad
 * Ligero y rápido (menos de 50KB)
@@ -38,7 +38,9 @@ YGB Category Showcase es un plugin ligero y seguro que te permite mostrar las ca
 | Atributo | Valores | Default | Descripción |
 |----------|--------|---------|-------------|
 | number | 1-20 | 12 | Número de categorías a mostrar |
-| columns | 1-12 | 4 | Columnas en desktop |
+| columns | 1-12 | 4 | Columnas en desktop (PC) |
+| columns_tablet | 1-6 | 2 | Columnas en tablet (≤1024px) |
+| columns_mobile | 1-4 | 1 | Columnas en móvil (≤767px) |
 | hide_empty | true/false | true | Ocultar categorías sin productos |
 | orderby | name/count/slug/term_group/term_order | name | Campo de ordenamiento |
 | order | ASC/DESC | ASC | Dirección del orden |
@@ -52,14 +54,17 @@ YGB Category Showcase es un plugin ligero y seguro que te permite mostrar las ca
 Mostrar 6 categorías en 3 columnas:
 `[ygb_categories number="6" columns="3"]`
 
-Mostrar 8 categorías en 4 columnas:
-`[ygb_categories number="8" columns="4"]`
+Mostrar 8 categorías en 4 columnas (PC), 2 (tablet), 1 (móvil):
+`[ygb_categories number="8" columns="4" columns_tablet="2" columns_mobile="1"]`
 
 Ordenar por cantidad de productos:
 `[ygb_categories orderby="count" order="DESC"]`
 
 Sin conteo ni descripciones:
 `[ygb_categories show_count="false" show_description="false"]`
+
+Configuración responsive personalizada:
+`[ygb_categories columns="6" columns_tablet="3" columns_mobile="2"]`
 
 = Requisitos =
 
@@ -102,6 +107,14 @@ Sí, el plugin ha sido auditado por expertos en seguridad WordPress y sigue toda
 
 == Changelog ==
 
+= 3.5.0 =
+* **NUEVA CARACTERÍSTICA:** Configuración de columnas responsive para 3 dispositivos (PC, Tablet, Móvil)
+* **NUEVA CARACTERÍSTICA:** Nuevos atributos de shortcode: `columns_tablet` (1-6) y `columns_mobile` (1-4)
+* **NUEVA CARACTERÍSTICA:** Campos en el admin para configurar columnas por dispositivo
+* **MEJORA:** Breakpoints personalizados: tablet ≤1024px, móvil ≤767px
+* **CORRECCIÓN:** Grid ya no se deforma en tablets y móviles - ahora respeta la configuración del usuario
+* **MEJORA:** CSS inline generado dinámicamente con media queries para cada breakpoint
+
 = 3.4.0 =
 * **ACTUALIZACIÓN:** Versión actualizada a 3.4.0 en todos los archivos del plugin
 * **MEJORA:** Documentación de hooks actualizada con @since 3.4.0
@@ -142,6 +155,9 @@ Sí, el plugin ha sido auditado por expertos en seguridad WordPress y sigue toda
 * Versión inicial
 
 == Upgrade Notice ==
+
+= 3.5.0 =
+Actualización importante que añade configuración de columnas responsive para 3 dispositivos (PC, Tablet, Móvil). Corrige el problema de deformación del grid en tablets y móviles. Recomendada para todos los usuarios.
 
 = 3.4.0 =
 Actualización de mantenimiento que unifica la versión 3.4.0 en todos los archivos del plugin y actualiza la documentación de hooks. Recomendada para mantener consistencia.

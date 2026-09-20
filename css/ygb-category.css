@@ -99,24 +99,18 @@
 
 /* ============================================
    RESPONSIVE - CORREGIDO: Respeta configuración del usuario
+   Las columnas se definen inline desde PHP
    ============================================ */
 
-/* Tablet (768px - 1024px) - Reduce columnas progresivamente sin forzar valores fijos */
+/* Tablet (768px - 1024px) - El grid usa media queries inline desde PHP */
 @media (min-width: 768px) and (max-width: 1024px) {
     .ygb-grid {
-        /* Usar auto-fit para adaptar columnas al ancho disponible */
-        grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr)) !important;
         gap: 8px;
     }
 }
 
-/* Móvil (≤767px) - 2 columnas como máximo para mejor usabilidad */
+/* Móvil (≤767px) - El grid usa media queries inline desde PHP */
 @media (max-width: 767px) {
-    .ygb-grid {
-        grid-template-columns: repeat(2, 1fr) !important;
-        gap: 8px;
-    }
-    
     .ygb-info {
         padding: 6px;
     }
@@ -126,13 +120,8 @@
     }
 }
 
-/* Móviles pequeños (≤480px) - 1 columna para mejor legibilidad */
+/* Móviles pequeños (≤480px) */
 @media (max-width: 480px) {
-    .ygb-grid {
-        grid-template-columns: 1fr !important;
-        gap: 6px;
-    }
-    
     .ygb-info {
         padding: 4px;
     }

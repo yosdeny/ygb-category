@@ -270,6 +270,8 @@ function ygb_display_categories( $atts ) {
     $default_options = get_option( 'ygb_category_options', array(
         'number'     => 12,
         'columns'    => 4,
+        'columns_tablet' => 2,
+        'columns_mobile' => 1,
         'hide_empty' => true,
         'orderby'    => 'name',
         'order'      => 'ASC',
@@ -287,6 +289,12 @@ function ygb_display_categories( $atts ) {
     
     $atts['columns'] = isset( $atts['columns'] ) ? absint( $atts['columns'] ) : 4;
     $atts['columns'] = max( 1, min( 12, $atts['columns'] ) );
+    
+    $atts['columns_tablet'] = isset( $atts['columns_tablet'] ) ? absint( $atts['columns_tablet'] ) : 2;
+    $atts['columns_tablet'] = max( 1, min( 6, $atts['columns_tablet'] ) );
+    
+    $atts['columns_mobile'] = isset( $atts['columns_mobile'] ) ? absint( $atts['columns_mobile'] ) : 1;
+    $atts['columns_mobile'] = max( 1, min( 4, $atts['columns_mobile'] ) );
     
     $atts['hide_empty'] = filter_var( $atts['hide_empty'], FILTER_VALIDATE_BOOLEAN );
     $atts['show_count'] = filter_var( $atts['show_count'], FILTER_VALIDATE_BOOLEAN );
@@ -323,6 +331,8 @@ function ygb_display_categories( $atts ) {
         }
         
         $columns = max( 1, min( 12, absint( $atts['columns'] ) ) );
+        $columns_tablet = max( 1, min( 6, absint( $atts['columns_tablet'] ) ) );
+        $columns_mobile = max( 1, min( 4, absint( $atts['columns_mobile'] ) ) );
         
         /**
          * Acción antes del grid de categorías
@@ -334,7 +344,12 @@ function ygb_display_categories( $atts ) {
         do_action( 'ygb_before_grid', $atts );
         $output .= ob_get_clean();
         
-        $output .= '<div class="ygb-grid" style="grid-template-columns: repeat(' . esc_attr( (string) $columns ) . ', 1fr);">';
+        // Generar CSS inline con configuración responsive completa
+        $grid_style = 'grid-template-columns: repeat(' . esc_attr( (string) $columns ) . ', 1fr);';
+        $grid_style .= '@media (max-width: 1024px) { grid-template-columns: repeat(' . esc_attr( (string) $columns_tablet ) . ', 1fr) !important; }';
+        $grid_style .= '@media (max-width: 767px) { grid-template-columns: repeat(' . esc_attr( (string) $columns_mobile ) . ', 1fr) !important; }';
+        
+        $output .= '<div class="ygb-grid" style="' . esc_attr( $grid_style ) . '">';
         
         foreach ( $categories as $category ) {
             $thumbnail_id = get_term_meta( $category->term_id, 'thumbnail_id', true );
@@ -547,13 +562,17 @@ function ygb_admin_page() {
         // Opciones básicas
         $options['number']     = isset( $_POST['number'] ) ? absint( $_POST['number'] ) : 12;
         $options['columns']    = isset( $_POST['columns'] ) ? absint( $_POST['columns'] ) : 4;
+        $options['columns_tablet'] = isset( $_POST['columns_tablet'] ) ? absint( $_POST['columns_tablet'] ) : 2;
+        $options['columns_mobile'] = isset( $_POST['columns_mobile'] ) ? absint( $_POST['columns_mobile'] ) : 1;
         $options['hide_empty'] = isset( $_POST['hide_empty'] );
         $options['show_count'] = isset( $_POST['show_count'] );
         $options['show_description'] = isset( $_POST['show_description'] );
         $options['cache']      = isset( $_POST['cache'] );
         
-        $options['number']  = max( 1, min( 20, $options['number'] ) );
-        $options['columns'] = max( 1, min( 12, $options['columns'] ) );
+        $options['number']         = max( 1, min( 20, $options['number'] ) );
+        $options['columns']        = max( 1, min( 12, $options['columns'] ) );
+        $options['columns_tablet'] = max( 1, min( 6, $options['columns_tablet'] ) );
+        $options['columns_mobile'] = max( 1, min( 4, $options['columns_mobile'] ) );
         
         // Orderby
         $allowed_orderby = array( 'name', 'count', 'slug', 'term_group', 'term_order' );
@@ -663,6 +682,22 @@ function ygb_admin_page() {
                             <td>
                                 <input type="number" id="columns" name="columns" value="<?php echo esc_attr( $options['columns'] ); ?>" min="1" max="12" class="small-text">
                                 <p class="description"><?php esc_html_e( 'Número de columnas en desktop (1-12)', 'ygb-category' ); ?></p>
+                            </td>
+                          </tr>
+                        
+                        <tr>
+                            <th><label for="columns_tablet"><?php esc_html_e( 'Columnas (Tablet)', 'ygb-category' ); ?></label></th>
+                            <td>
+                                <input type="number" id="columns_tablet" name="columns_tablet" value="<?php echo esc_attr( $options['columns_tablet'] ); ?>" min="1" max="6" class="small-text">
+                                <p class="description"><?php esc_html_e( 'Columnas para tablets (≤1024px, 1-6)', 'ygb-category' ); ?></p>
+                            </td>
+                          </tr>
+                        
+                        <tr>
+                            <th><label for="columns_mobile"><?php esc_html_e( 'Columnas (Móvil)', 'ygb-category' ); ?></label></th>
+                            <td>
+                                <input type="number" id="columns_mobile" name="columns_mobile" value="<?php echo esc_attr( $options['columns_mobile'] ); ?>" min="1" max="4" class="small-text">
+                                <p class="description"><?php esc_html_e( 'Columnas para móviles (≤767px, 1-4)', 'ygb-category' ); ?></p>
                             </td>
                           </tr>
                         

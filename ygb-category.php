@@ -267,11 +267,13 @@ function ygb_display_categories( $atts ) {
         return '<p>' . esc_html__( 'Este plugin requiere WooCommerce.', 'ygb-category' ) . '</p>';
     }
     
-    $default_options = get_option( 'ygb_category_options', array(
+    $saved_options = get_option( 'ygb_category_options', array() );
+    
+    $default_options = array(
         'number'     => 12,
         'columns'    => 4,
-        'columns_tablet' => 5,
-        'columns_mobile' => 3,
+        'columns_tablet' => isset( $saved_options['columns_tablet'] ) ? $saved_options['columns_tablet'] : 5,
+        'columns_mobile' => isset( $saved_options['columns_mobile'] ) ? $saved_options['columns_mobile'] : 3,
         'hide_empty' => true,
         'orderby'    => 'name',
         'order'      => 'ASC',
@@ -279,21 +281,28 @@ function ygb_display_categories( $atts ) {
         'show_description' => true,
         'image_size' => 'medium',
         'cache'      => true
-    ) );
+    );
+    
+    // Fusionar opciones guardadas con defaults
+    foreach ( $saved_options as $key => $value ) {
+        if ( ! isset( $default_options[ $key ] ) ) {
+            $default_options[ $key ] = $value;
+        }
+    }
     
     $atts = shortcode_atts( $default_options, $atts );
     
     // Sanitizar atributos - obtener valores de la opción o usar defaults
-    $atts['number'] = isset( $atts['number'] ) ? absint( $atts['number'] ) : 12;
+    $atts['number'] = isset( $atts['number'] ) ? absint( $atts['number'] ) : $default_options['number'];
     $atts['number'] = max( 1, min( 20, $atts['number'] ) );
     
-    $atts['columns'] = isset( $atts['columns'] ) ? absint( $atts['columns'] ) : 4;
+    $atts['columns'] = isset( $atts['columns'] ) ? absint( $atts['columns'] ) : $default_options['columns'];
     $atts['columns'] = max( 1, min( 12, $atts['columns'] ) );
     
-    $atts['columns_tablet'] = isset( $atts['columns_tablet'] ) ? absint( $atts['columns_tablet'] ) : 5;
+    $atts['columns_tablet'] = isset( $atts['columns_tablet'] ) ? absint( $atts['columns_tablet'] ) : $default_options['columns_tablet'];
     $atts['columns_tablet'] = max( 1, min( 6, $atts['columns_tablet'] ) );
     
-    $atts['columns_mobile'] = isset( $atts['columns_mobile'] ) ? absint( $atts['columns_mobile'] ) : 3;
+    $atts['columns_mobile'] = isset( $atts['columns_mobile'] ) ? absint( $atts['columns_mobile'] ) : $default_options['columns_mobile'];
     $atts['columns_mobile'] = max( 1, min( 4, $atts['columns_mobile'] ) );
     
     $atts['hide_empty'] = filter_var( $atts['hide_empty'], FILTER_VALIDATE_BOOLEAN );

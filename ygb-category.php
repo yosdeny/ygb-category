@@ -271,16 +271,16 @@ function ygb_display_categories( $atts ) {
     
     // Valores por defecto seguros
     $default_options = array(
-        'number'     => 12,
+        'number'     => isset( $saved_options['number'] ) ? $saved_options['number'] : 12,
         'columns'    => isset( $saved_options['columns'] ) ? $saved_options['columns'] : 4,
         'columns_tablet' => isset( $saved_options['columns_tablet'] ) ? $saved_options['columns_tablet'] : 5,
         'columns_mobile' => isset( $saved_options['columns_mobile'] ) ? $saved_options['columns_mobile'] : 3,
         'hide_empty' => isset( $saved_options['hide_empty'] ) ? $saved_options['hide_empty'] : true,
-        'orderby'    => 'name',
-        'order'      => 'ASC',
+        'orderby'    => isset( $saved_options['orderby'] ) ? $saved_options['orderby'] : 'name',
+        'order'      => isset( $saved_options['order'] ) ? $saved_options['order'] : 'ASC',
         'show_count' => isset( $saved_options['show_count'] ) ? $saved_options['show_count'] : true,
         'show_description' => isset( $saved_options['show_description'] ) ? $saved_options['show_description'] : true,
-        'image_size' => 'medium',
+        'image_size' => isset( $saved_options['image_size'] ) ? $saved_options['image_size'] : 'medium',
         'cache'      => isset( $saved_options['cache'] ) ? $saved_options['cache'] : true
     );
     

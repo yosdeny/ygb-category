@@ -269,21 +269,22 @@ function ygb_display_categories( $atts ) {
     
     $saved_options = get_option( 'ygb_category_options', array() );
     
+    // Valores por defecto seguros
     $default_options = array(
         'number'     => 12,
-        'columns'    => 4,
+        'columns'    => isset( $saved_options['columns'] ) ? $saved_options['columns'] : 4,
         'columns_tablet' => isset( $saved_options['columns_tablet'] ) ? $saved_options['columns_tablet'] : 5,
         'columns_mobile' => isset( $saved_options['columns_mobile'] ) ? $saved_options['columns_mobile'] : 3,
-        'hide_empty' => true,
+        'hide_empty' => isset( $saved_options['hide_empty'] ) ? $saved_options['hide_empty'] : true,
         'orderby'    => 'name',
         'order'      => 'ASC',
-        'show_count' => true,
-        'show_description' => true,
+        'show_count' => isset( $saved_options['show_count'] ) ? $saved_options['show_count'] : true,
+        'show_description' => isset( $saved_options['show_description'] ) ? $saved_options['show_description'] : true,
         'image_size' => 'medium',
-        'cache'      => true
+        'cache'      => isset( $saved_options['cache'] ) ? $saved_options['cache'] : true
     );
     
-    // Fusionar opciones guardadas con defaults
+    // Fusionar opciones guardadas con defaults (para cualquier opción adicional)
     foreach ( $saved_options as $key => $value ) {
         if ( ! isset( $default_options[ $key ] ) ) {
             $default_options[ $key ] = $value;
@@ -292,23 +293,23 @@ function ygb_display_categories( $atts ) {
     
     $atts = shortcode_atts( $default_options, $atts );
     
-    // Sanitizar atributos - obtener valores de la opción o usar defaults
-    $atts['number'] = isset( $atts['number'] ) ? absint( $atts['number'] ) : $default_options['number'];
+    // Sanitizar atributos - usar valores de $atts directamente (ya incluyen saved_options via shortcode_atts)
+    $atts['number'] = absint( $atts['number'] );
     $atts['number'] = max( 1, min( 20, $atts['number'] ) );
     
-    $atts['columns'] = isset( $atts['columns'] ) ? absint( $atts['columns'] ) : $default_options['columns'];
+    $atts['columns'] = absint( $atts['columns'] );
     $atts['columns'] = max( 1, min( 12, $atts['columns'] ) );
     
-    $atts['columns_tablet'] = isset( $atts['columns_tablet'] ) ? absint( $atts['columns_tablet'] ) : $default_options['columns_tablet'];
+    $atts['columns_tablet'] = absint( $atts['columns_tablet'] );
     $atts['columns_tablet'] = max( 1, min( 6, $atts['columns_tablet'] ) );
     
-    $atts['columns_mobile'] = isset( $atts['columns_mobile'] ) ? absint( $atts['columns_mobile'] ) : $default_options['columns_mobile'];
+    $atts['columns_mobile'] = absint( $atts['columns_mobile'] );
     $atts['columns_mobile'] = max( 1, min( 4, $atts['columns_mobile'] ) );
     
-    $atts['hide_empty'] = filter_var( $atts['hide_empty'], FILTER_VALIDATE_BOOLEAN );
-    $atts['show_count'] = filter_var( $atts['show_count'], FILTER_VALIDATE_BOOLEAN );
-    $atts['show_description'] = filter_var( $atts['show_description'], FILTER_VALIDATE_BOOLEAN );
-    $atts['cache'] = filter_var( $atts['cache'], FILTER_VALIDATE_BOOLEAN );
+    $atts['hide_empty'] = (bool) $atts['hide_empty'];
+    $atts['show_count'] = (bool) $atts['show_count'];
+    $atts['show_description'] = (bool) $atts['show_description'];
+    $atts['cache'] = (bool) $atts['cache'];
     
     $allowed_orderby = array( 'name', 'count', 'slug', 'term_group', 'term_order' );
     $atts['orderby'] = in_array( $atts['orderby'], $allowed_orderby, true ) ? $atts['orderby'] : 'name';
